@@ -188,7 +188,3 @@ The Black–Scholes framework assumes:
 - European exercise
 
 These assumptions limit the model's ability to represent volatility smiles, jumps, transaction costs, discrete hedging, early exercise, and changing market conditions.
-
-## Scope
-
-This project is intended as a clear model-development and validation exercise. It is not a production trading or risk-management system.
