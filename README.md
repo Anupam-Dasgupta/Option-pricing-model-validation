@@ -1,6 +1,6 @@
 # Option Pricing Model Validation
 
-A compact Python project for pricing and independently validating European options.
+A very simple Python project for pricing and independently validating European options.
 
 The project implements Black–Scholes, a Cox–Ross–Rubinstein binomial tree, and Monte Carlo simulation, then compares their outputs through convergence tests, numerical checks, sensitivity analysis, and stress testing.
 
