@@ -51,3 +51,13 @@ def test_invalid_inputs_raise_clear_errors():
 
     with pytest.raises(ValueError):
         monte_carlo_price(**BASE, option_type="call", paths=1)
+
+def test_antithetic_requires_even_paths():
+    with pytest.raises(ValueError):
+        monte_carlo_price(
+            **BASE,
+            option_type="call",
+            paths=99_999,
+            seed=42,
+            antithetic=True,
+        )
