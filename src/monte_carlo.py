@@ -35,9 +35,14 @@ def monte_carlo_price(
     rng = np.random.default_rng(seed)
 
     if antithetic:
-        half = (paths + 1) // 2
-        z = rng.standard_normal(half)
-        z = np.concatenate((z, -z))[:paths]
+        if paths < 4 or paths % 2 != 0:
+            raise ValueError(
+                "antithetic sampling requires an even number of paths >= 4"
+            )
+    
+        half = paths // 2
+        z_half = rng.standard_normal(half)
+        z = np.concatenate((z_half, -z_half))
     else:
         z = rng.standard_normal(paths)
 
@@ -53,9 +58,19 @@ def monte_carlo_price(
         payoff = np.maximum(strike - terminal_spot, 0.0)
 
     discounted_payoff = exp(-rate * maturity) * payoff
-    price = float(discounted_payoff.mean())
-    standard_error = float(
-        discounted_payoff.std(ddof=1) / sqrt(paths)
-    )
-
+    if antithetic:
+        pair_payoffs = 0.5 * (
+            discounted_payoff[:half]
+            + discounted_payoff[half:]
+        )
+    
+        price = float(pair_payoffs.mean())
+        standard_error = float(
+            pair_payoffs.std(ddof=1) / sqrt(half)
+        )
+    else:
+        price = float(discounted_payoff.mean())
+        standard_error = float(
+            discounted_payoff.std(ddof=1) / sqrt(paths)
+        )
     return price, standard_error
